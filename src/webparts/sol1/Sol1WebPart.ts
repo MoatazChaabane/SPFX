@@ -30,7 +30,7 @@ export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         context: this.context,
-        redirectTo: this.navigateToNextComponent, // Ajout de la propriété redirectTo
+        redirectTo: this.navigateToNextComponent, 
       }
     );
 

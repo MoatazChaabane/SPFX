@@ -42,7 +42,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
       if (postResponse.ok) {
         const postResponseJSON = await postResponse.json();
         console.log('POST Response:', postResponseJSON);
-        this.props.redirectTo(); // Redirection vers List après les appels API réussis
+        this.props.redirectTo(); 
       } else {
         throw new Error(`POST Error: ${postResponse.statusText}`);
       }
