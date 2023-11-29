@@ -1,4 +1,3 @@
-// sol1.tsx
 import * as React from 'react';
 import styles from './Sol1.module.scss';
 import { escape } from '@microsoft/sp-lodash-subset';
@@ -21,7 +20,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     const mail = (document.getElementById('email') as HTMLInputElement).value;
     const age = (document.getElementById('age') as HTMLInputElement).value;
 
-    const url = `${this.props.context.pageContext.web.absoluteUrl}/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
+    const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
 
     const itemBody = {
       'Title': nom,

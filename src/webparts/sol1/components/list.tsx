@@ -1,4 +1,3 @@
-// list.tsx
 import * as React from 'react';
 import styles from './Sol1.module.scss';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
@@ -37,7 +36,7 @@ export default class List extends React.Component<IListProps, IListState> {
   }
 
   private getData(): void {
-    const url = `${this.props.context.pageContext.web.absoluteUrl}/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
+    const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
 
     // GET Api
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1, {
