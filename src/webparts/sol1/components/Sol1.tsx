@@ -1,3 +1,4 @@
+// sol1.tsx
 import * as React from 'react';
 import styles from './Sol1.module.scss';
 import { escape } from '@microsoft/sp-lodash-subset';
@@ -11,10 +12,10 @@ export interface ISol1Props {
   hasTeamsContext: boolean;
   userDisplayName: string;
   context: WebPartContext;
+  redirectTo: () => void;
 }
 
 export default class Sol1 extends React.Component<ISol1Props, {}> {
-
   private async sendData(): Promise<void> {
     const nom = (document.getElementById('name') as HTMLInputElement).value;
     const mail = (document.getElementById('email') as HTMLInputElement).value;
@@ -29,7 +30,6 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     };
 
     //POST REQUEST
-
     try {
       const postResponse = await this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
         headers: {
@@ -42,41 +42,17 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
       if (postResponse.ok) {
         const postResponseJSON = await postResponse.json();
         console.log('POST Response:', postResponseJSON);
-        // alert('POST Success');
-        
+        this.props.redirectTo(); // Redirection vers List après les appels API réussis
       } else {
         throw new Error(`POST Error: ${postResponse.statusText}`);
       }
     } catch (postError) {
-      // console.error('POST Error:', postError);
-    }
-//GET REQUEST
-    try {
-      const getResponse = await this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1);
-
-      if (getResponse.ok) {
-        const getResponseJSON = await getResponse.json();
-        // console.log('GET Response:', getResponseJSON);
-
-        if (getResponseJSON != null && getResponseJSON.value != null) {
-          getResponseJSON.value.forEach((item: any) => {
-            console.log(item);
-          });
-        }
-      } else {
-        throw new Error(`GET Error: ${getResponse.statusText}`);
-      }
-    } catch (getError) {
-      console.error('GET Error:', getError);
+      console.error('POST Error:', postError);
     }
   }
 
   public render(): React.ReactElement<ISol1Props> {
-    const {
-     
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
+    const { hasTeamsContext, userDisplayName } = this.props;
 
     return (
       <section className={`${styles.sol1} ${hasTeamsContext ? styles.teams : ''}`}>
@@ -85,18 +61,20 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
         </div>
         <div className="container">
           <table className="table">
-            <tr>
-              <td><b>Name</b></td>
-              <td><input className="form-control" type='text' id='name' required /></td>
-            </tr>
-            <tr>
-              <td><b>Email</b></td>
-              <td><input className="form-control" type='email' id='email' required /></td>
-            </tr>
-            <tr>
-              <td><b>Age</b></td>
-              <td><input className="form-control" type='number' id='age' required /></td>
-            </tr>
+            <tbody>
+              <tr>
+                <td><b>Name</b></td>
+                <td><input className="form-control" type='text' id='name' required /></td>
+              </tr>
+              <tr>
+                <td><b>Email</b></td>
+                <td><input className="form-control" type='email' id='email' required /></td>
+              </tr>
+              <tr>
+                <td><b>Age</b></td>
+                <td><input className="form-control" type='number' id='age' required /></td>
+              </tr>
+            </tbody>
           </table>
           <button className="btn btn-primary" onClick={() => this.sendData()}>Send</button>
         </div>

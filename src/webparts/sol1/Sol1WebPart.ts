@@ -1,3 +1,4 @@
+// sol1webparts.ts
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
@@ -9,13 +10,13 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
 import * as strings from 'Sol1WebPartStrings';
 import Sol1, { ISol1Props } from './components/Sol1';
+import List, { IListProps } from './components/list'; // Assurez-vous que le chemin est correct
 
 export interface ISol1WebPartProps {
   description: string;
 }
 
 export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps> {
-
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
 
@@ -28,12 +29,29 @@ export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
-        context: this.context // Pass the context property to Sol1 component
+        context: this.context,
+        redirectTo: this.navigateToNextComponent, // Ajout de la propriété redirectTo
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
+
+  private navigateToNextComponent = (): void => {
+    const listElement: React.ReactElement<IListProps> = React.createElement(
+      List,
+      {
+        description: this.properties.description,
+        isDarkTheme: this._isDarkTheme,
+        environmentMessage: this._environmentMessage,
+        hasTeamsContext: !!this.context.sdks.microsoftTeams,
+        userDisplayName: this.context.pageContext.user.displayName,
+        context: this.context,
+      }
+    );
+
+    ReactDom.render(listElement, this.domElement);
+  };
 
   protected onInit(): Promise<void> {
     return this._getEnvironmentMessage().then(message => {
