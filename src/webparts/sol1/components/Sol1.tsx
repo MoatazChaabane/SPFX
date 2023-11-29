@@ -16,7 +16,7 @@ export interface ISol1Props {
 
 export default class Sol1 extends React.Component<ISol1Props, {}> {
 
-  private afficher(): void {
+  private sendData(): void {
     //les donées des inputs
     const nom = (document.getElementById('name') as HTMLInputElement).value;
     const mail = (document.getElementById('email') as HTMLInputElement).value;
@@ -25,12 +25,10 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     const url = `${this.props.context.pageContext.web.absoluteUrl}/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
     //covert data to JSON
     const itemBody = {
-      // '__metadata': { 'type': 'SP.Data.PersonneListItem' },
       'Title': nom,
       'Email': mail,
       'Age': age
     };
-console.log(JSON.stringify(itemBody));
 //POST Api
 this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
   headers: {
@@ -103,7 +101,7 @@ this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
               <td><input type='number' id='age' required /></td>
             </tr>
           </table>
-          <button onClick={() => this.afficher()}>Send</button>
+          <button onClick={() => this.sendData()}>Send</button>
           {/* <input type='button' id='sub' onClick={() => this.afficher()} value='Submit' /> */}
       </section>
     );
