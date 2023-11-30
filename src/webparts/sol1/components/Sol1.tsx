@@ -16,9 +16,18 @@ export interface ISol1Props {
 
 export default class Sol1 extends React.Component<ISol1Props, {}> {
   private async sendData(): Promise<void> {
-    const nom = (document.getElementById('name') as HTMLInputElement).value;
-    const mail = (document.getElementById('email') as HTMLInputElement).value;
-    const age = (document.getElementById('age') as HTMLInputElement).value;
+    let nom = (document.getElementById('name') as HTMLInputElement).value;
+    let mail = (document.getElementById('email') as HTMLInputElement).value;
+    let age = (document.getElementById('age') as HTMLInputElement).value;
+    //verify name
+    if (nom === '' || !(/^[A-Za-z]+$/.test(nom))){
+      alert('le nom est vide');
+      return;
+      //verify email
+    }else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))){
+      alert ("Verify email")
+      return;
+    }
 
     const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
 
