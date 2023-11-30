@@ -16,6 +16,7 @@ export interface IListProps {
   hasTeamsContext: boolean;
   userDisplayName: string;
   context: WebPartContext;
+  redirectTo: () => void;
 }
 
 interface IListState {
@@ -29,6 +30,10 @@ export default class List extends React.Component<IListProps, IListState> {
     this.state = {
       people: [],
     };
+  }
+
+  private async onReturn(): Promise<void> {
+    this.props.redirectTo();
   }
 
   componentDidMount() {
@@ -45,22 +50,22 @@ export default class List extends React.Component<IListProps, IListState> {
         'Content-Type': 'application/json',
       },
     })
-    .then((response: SPHttpClientResponse) => {
-      console.log(`Status code: ${response.status}`);
-      console.log(`Status text: ${response.statusText}`);
+      .then((response: SPHttpClientResponse) => {
+        console.log(`Status code: ${response.status}`);
+        console.log(`Status text: ${response.statusText}`);
 
-      if (response.ok) {
-        response.json().then((responseJSON: { value: IPerson[] }) => {
-          console.log(responseJSON);
-          this.setState({ people: responseJSON.value });
-        });
-      } else {
-        console.error('Error:', response.statusText);
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+        if (response.ok) {
+          response.json().then((responseJSON: { value: IPerson[] }) => {
+            console.log(responseJSON);
+            this.setState({ people: responseJSON.value });
+          });
+        } else {
+          console.error('Error:', response.statusText);
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 
   public render(): React.ReactElement<IListProps> {
@@ -88,6 +93,7 @@ export default class List extends React.Component<IListProps, IListState> {
               ))}
             </tbody>
           </table>
+          <button className="btn btn-primary" onClick={() => this.onReturn()}>Return</button>
         </div>
       </section>
     );

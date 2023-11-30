@@ -19,13 +19,13 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     let nom = (document.getElementById('name') as HTMLInputElement).value;
     let mail = (document.getElementById('email') as HTMLInputElement).value;
     let age = (document.getElementById('age') as HTMLInputElement).value;
+
     //verify name
-    if (nom === '' || !(/^[A-Za-z]+$/.test(nom))){
+    if (nom === '' || !(/^[A-Za-z]+$/.test(nom))) {
       alert('le nom est vide');
       return;
-      //verify email
-    }else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))){
-      alert ("Verify email")
+    } else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
+      alert("Verify email");
       return;
     }
 
@@ -50,7 +50,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
       if (postResponse.ok) {
         const postResponseJSON = await postResponse.json();
         console.log('POST Response:', postResponseJSON);
-        this.props.redirectTo(); 
+        this.props.redirectTo();
       } else {
         throw new Error(`POST Error: ${postResponse.statusText}`);
       }

@@ -29,13 +29,12 @@ export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         context: this.context,
-        redirectTo: this.navigateToNextComponent, 
+        redirectTo: this.navigateToNextComponent,
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
-
   private navigateToNextComponent = (): void => {
     const listElement: React.ReactElement<IListProps> = React.createElement(
       List,
@@ -46,16 +45,19 @@ export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
         userDisplayName: this.context.pageContext.user.displayName,
         context: this.context,
+        redirectTo: () => this.render(),
       }
     );
 
     ReactDom.render(listElement, this.domElement);
   };
 
-  protected onInit(): Promise<void> {
-    return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
-    });
+  protected async onInit(): Promise<void> {
+    try {
+      this._environmentMessage = await this._getEnvironmentMessage();
+    } catch (error) {
+      console.error('Error during onInit:', error);
+    }
   }
 
   private _getEnvironmentMessage(): Promise<string> {
@@ -115,20 +117,20 @@ export default class Sol1WebPart extends BaseClientSideWebPart<ISol1WebPartProps
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.PropertyPaneDescription,
           },
           groups: [
             {
               groupName: strings.BasicGroupName,
               groupFields: [
                 PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                })
-              ]
-            }
-          ]
-        }
-      ]
+                  label: strings.DescriptionFieldLabel,
+                }),
+              ],
+            },
+          ],
+        },
+      ],
     };
   }
 }
