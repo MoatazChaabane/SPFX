@@ -14,13 +14,50 @@ export interface ISol1Props {
   redirectTo: () => void;
 }
 
-export default class Sol1 extends React.Component<ISol1Props, {}> {
-  private async sendData(): Promise<void> {
-    const nom = (document.getElementById('name') as HTMLInputElement).value;
-    const mail = (document.getElementById('email') as HTMLInputElement).value;
-    const age = (document.getElementById('age') as HTMLInputElement).value;
+interface ISol1State {
+  nom: string;
+  age: string;
+  ageErrorMessage: string;
+}
 
-    //verify name
+export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
+  constructor(props: ISol1Props) {
+    super(props);
+
+    this.state = {
+      nom: '',
+      age: '',
+      ageErrorMessage: '',
+    };
+  }
+
+  private handleNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    this.setState({ nom: event.target.value });
+  };
+
+  private handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const age = event.target.value;
+    this.setState({ age });
+
+    // Vérifiez si l'âge est inférieur à 18 et mettez à jour le message d'erreur
+    if (age !== '' && parseInt(age, 10) < 18) {
+      this.setState({ ageErrorMessage: "You must be 18 or older to proceed." });
+    } else {
+      this.setState({ ageErrorMessage: '' });
+    }
+  };
+
+  private async sendData(): Promise<void> {
+    const { nom, age } = this.state;
+    const mail = (document.getElementById('email') as HTMLInputElement).value;
+
+    // Vérifiez l'âge avant d'envoyer les données
+    if (age !== '' && parseInt(age, 10) < 18) {
+      this.setState({ ageErrorMessage: "You must be 18 or older to proceed." });
+      return;
+    }
+
+    // Vérifiez le nom et le courriel
     if (nom === '' || !(/^[A-Za-z\s]+$/.test(nom))) {
       alert('le nom est vide');
       return;
@@ -32,7 +69,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
       return;
     }
 
-
+    // Envoyer les données
     const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
 
     const itemBody = {
@@ -41,7 +78,6 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
       'Age': age
     };
 
-    //POST REQUEST
     try {
       const postResponse = await this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
         headers: {
@@ -65,6 +101,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
 
   public render(): React.ReactElement<ISol1Props> {
     const { hasTeamsContext, userDisplayName } = this.props;
+    const { ageErrorMessage } = this.state;
 
     return (
       <section className={`${styles.sol1} ${hasTeamsContext ? styles.teams : ''}`}>
@@ -76,7 +113,7 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
             <tbody>
               <tr>
                 <td><b>Name</b></td>
-                <td><input className="form-control" type='text' id='name' required /></td>
+                <td><input className="form-control" type='text' id='name' onChange={this.handleNameChange} required /></td>
               </tr>
               <tr>
                 <td><b>Email</b></td>
@@ -84,7 +121,10 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
               </tr>
               <tr>
                 <td><b>Age</b></td>
-                <td><input className="form-control" type='number' id='age' required /></td>
+                <td>
+                  <input className="form-control" type='number' id='age' onChange={this.handleAgeChange} required />
+                  {ageErrorMessage && <p style={{ color: 'red' }}>{ageErrorMessage}</p>}
+                </td>
               </tr>
             </tbody>
           </table>
