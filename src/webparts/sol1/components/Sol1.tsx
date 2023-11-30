@@ -21,13 +21,13 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     let age = (document.getElementById('age') as HTMLInputElement).value;
 
     //verify name
-    if (nom === '' || !(/^[A-Za-z]+$/.test(nom))) {
+    if (nom == '' || !(/^[A-Za-z]+$/.test(nom))) {
       alert('le nom est vide');
       return;
-    } else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
+    } else if (mail == '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
       alert("Verify email");
       return;
-    }else if (mail === '' ) {
+    }else if (!age ) {
       alert ("Verify age");
       return;
     }
