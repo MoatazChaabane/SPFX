@@ -27,7 +27,11 @@ export default class Sol1 extends React.Component<ISol1Props, {}> {
     } else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
       alert("Verify email");
       return;
+    }else if (mail === '' ) {
+      alert ("Verify age");
+      return;
     }
+
 
     const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items`;
 
