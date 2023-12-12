@@ -13,7 +13,10 @@
     "outDir": "lib",
     "inlineSources": false,
     "noImplicitAny": true,
-
+    "strict": true,  // Enforce strict type checking
+    "esModuleInterop": true, // Enable interoperability between CommonJS and ES Modules
+    "resolveJsonModule": true, // Allow importing JSON modules
+    "isolatedModules": false, // Set to true if you want each file to be treated as a separate module
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
@@ -25,7 +28,8 @@
       "es5",
       "dom",
       "es2015.collection",
-      "es2015.promise"
+      "es2015.promise",
+      "es2015.iterable", // Add es2015.iterable to resolve the Array.from issue
     ]
   },
   "include": [
