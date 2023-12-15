@@ -35,6 +35,14 @@ export default class List extends React.Component<IListProps, IListState> {
 
   // DELETE DATA
   private async deleteData(itemId: number): Promise<void> {
+    // Utiliser la fonction window.confirm pour afficher une boîte de dialogue de confirmation
+    const confirmDelete = window.confirm('Are you sure you want to delete this item?');
+
+    // Vérifier si l'utilisateur a confirmé la suppression
+    if (!confirmDelete) {
+      return;
+    }
+
     const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items(${itemId})`;
 
     try {
