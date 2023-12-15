@@ -100,62 +100,62 @@ export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
   };
 
   // UPDATE DATA
-  private async updateData(): Promise<void> {
-    const { nom, age } = this.state;
-    const mail = (document.getElementById('email') as HTMLInputElement).value;
-  
-    // Vérifiez l'âge avant de mettre à jour les données
-    if (age !== '' && parseInt(age, 10) < 18) {
-      this.setState({ ageErrorMessage: "You must be 18 or older to proceed." });
-      return;
-    }
-  
-    // Vérifiez le nom et le courriel
-    if (nom === '' || !(/^[A-Za-z\s]+$/.test(nom))) {
-      alert('le nom est vide');
-      return;
-    } else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
-      alert("Verify email");
-      return;
-    } else if (!age) {
-      alert("Verify age");
-      return;
-    }
-  
-    const itemId = localStorage.getItem("ID");
-  
-    // Mettre à jour les données avec la méthode POST et X-HTTP-Method: MERGE
-    const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items(${itemId})`;
-  
-    const itemBody = {
-      'Title': nom,
-      'Email': mail,
-      'Age': age
-    };
-    console.log(JSON.stringify(itemBody));
-  
-    try {
-      const postResponse = await this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'IF-MATCH': '*',
-          'X-HTTP-Method': 'MERGE'  // Use MERGE to update an existing item
-        },
-        body: JSON.stringify(itemBody),
-      });
-  
-      if (postResponse.ok) {
-        // La réponse JSON peut être vide, nous n'avons pas besoin de la traiter
-        console.log('POST Response:', postResponse);
-        this.props.redirectTo();
-      } else {
-        throw new Error(`POST Error: ${postResponse.statusText}`);
-      }
-    } catch (postError) {
-      console.error('POST Error:', postError);
-    }
+ private async updateData(): Promise<void> {
+  const { nom, age } = this.state;
+  const mail = (document.getElementById('email') as HTMLInputElement).value;
+
+  // Vérifiez l'âge avant de mettre à jour les données
+  if (age !== '' && parseInt(age, 10) < 18) {
+    this.setState({ ageErrorMessage: "You must be 18 or older to proceed." });
+    return;
   }
+
+  // Vérifiez le nom et le courriel
+  if (nom === '' || !(/^[A-Za-z\s]+$/.test(nom))) {
+    alert('le nom est vide');
+    return;
+  } else if (mail === '' || !(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(mail))) {
+    alert("Verify email");
+    return;
+  } else if (!age) {
+    alert("Verify age");
+    return;
+  }
+
+  const itemId = localStorage.getItem("ID");
+
+  // Mettre à jour les données avec la méthode POST et X-HTTP-Method: MERGE
+  const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items(${itemId})`;
+
+  const itemBody = {
+    'Title': nom,
+    'Email': mail,
+    'Age': age
+  };
+  console.log(JSON.stringify(itemBody));
+
+  try {
+    const postResponse = await this.props.context.spHttpClient.post(url, SPHttpClient.configurations.v1, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'IF-MATCH': '*',
+        'X-HTTP-Method': 'MERGE'  // Use MERGE to update an existing item
+      },
+      body: JSON.stringify(itemBody),
+    });
+
+    if (postResponse.ok) {
+      // La réponse JSON peut être vide, nous n'avons pas besoin de la traiter
+      console.log('POST Response:', postResponse);
+      this.props.redirectTo();
+    } else {
+      throw new Error(`POST Error: ${postResponse.statusText}`);
+    }
+  } catch (postError) {
+    console.error('POST Error:', postError);
+  }
+}
 
   // add data
   private async sendData(): Promise<void> {
