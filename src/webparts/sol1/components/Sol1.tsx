@@ -121,7 +121,6 @@ export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
     alert("Verify age");
     return;
   }
-
   const itemId = localStorage.getItem("ID");
 
   // Mettre à jour les données avec la méthode POST et X-HTTP-Method: MERGE
