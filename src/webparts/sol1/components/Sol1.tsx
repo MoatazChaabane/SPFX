@@ -156,6 +156,40 @@ export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
   }
 }
 
+//search data
+private async sendToSearch(): Promise<void> {
+  const { nom, age } = this.state;
+  const mail = (document.getElementById('email') as HTMLInputElement).value;
+  //creation du lien de api de recherche
+  const filters = [];
+
+  if (age !== '') {
+    filters.push(`Age eq ${age}`);
+  }
+  
+  if (nom !== '') {
+    filters.push(`Title eq '${nom}'`);
+  }
+  
+  if (mail !== '') {
+    filters.push(`Email eq '${mail}'`);
+  }
+  
+  const filterString = filters.length > 0 ? `$filter=${filters.join(' and ')}` : '';
+  
+  const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items?${filterString}`;
+  
+if(filters.length > 0){
+localStorage.setItem('searchApi',url);
+console.log(url)
+this.props.redirectTo();
+
+}
+}
+
+
+
+
   // add data
   private async sendData(): Promise<void> {
     const { nom, age } = this.state;
@@ -238,13 +272,15 @@ export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
                   {ageErrorMessage && <p style={{ color: 'red' }}>{ageErrorMessage}</p>}
                 </td>
               </tr>
-            </tbody>
-          </table>
+          
           {localStorage.getItem("ID") ? (
             <button className="btn btn-primary" onClick={() => this.updateData()}>Update</button>
           ) : (
-            <button className="btn btn-primary" onClick={() => this.sendData()}>Send</button>
+            <tr><td><button className="btn btn-primary" onClick={() => this.sendData()}>Send</button></td>
+            <td><button className="btn btn-primary" onClick={() => this.sendToSearch()}>Search By Name</button></td></tr>
           )}
+            </tbody>
+          </table>
         </div>
       </section>
     );

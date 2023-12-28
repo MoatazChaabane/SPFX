@@ -77,6 +77,8 @@ export default class List extends React.Component<IListProps, IListState> {
   // RETURN TO MAIN VIEW
   private async onReturn(): Promise<void> {
     localStorage.removeItem("ID");
+    localStorage.removeItem("searchApi");
+
 
     this.props.redirectTo();
   }
@@ -86,8 +88,14 @@ export default class List extends React.Component<IListProps, IListState> {
   }
 
   private getData(): void {
-    const url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items?$top=1000`;
-
+    let url: string;
+  
+    if (localStorage.getItem('searchApi')) {
+      url = localStorage.getItem('searchApi')!;
+    } else {
+      url = `https://mch12.sharepoint.com/sites/ABC/_api/web/lists/getbytitle('personne')/items?$top=1000`;
+    }
+  
     // GET Api
     this.props.context.spHttpClient.get(url, SPHttpClient.configurations.v1, {
       headers: {
@@ -98,7 +106,7 @@ export default class List extends React.Component<IListProps, IListState> {
       .then((response: SPHttpClientResponse) => {
         console.log(`Status code: ${response.status}`);
         console.log(`Status text: ${response.statusText}`);
-
+  
         if (response.ok) {
           response.json().then((responseJSON: { value: IPerson[] }) => {
             console.log(responseJSON);
@@ -112,6 +120,7 @@ export default class List extends React.Component<IListProps, IListState> {
         console.error('Error:', error);
       });
   }
+  
 
   public render(): React.ReactElement<IListProps> {
     const { hasTeamsContext } = this.props;
