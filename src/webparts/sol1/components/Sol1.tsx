@@ -277,7 +277,7 @@ this.props.redirectTo();
             <button className="btn btn-primary" onClick={() => this.updateData()}>Update</button>
           ) : (
             <tr><td><button className="btn btn-primary" onClick={() => this.sendData()}>Send</button></td>
-            <td><button className="btn btn-primary" onClick={() => this.sendToSearch()}>Search By Name</button></td></tr>
+            <td><button className="btn btn-primary" onClick={() => this.sendToSearch()}>Search</button></td></tr>
           )}
             </tbody>
           </table>
