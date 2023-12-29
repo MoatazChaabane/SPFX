@@ -245,12 +245,34 @@ this.props.redirectTo();
     }
   }
 
+  private renderHeader(): React.ReactNode {
+    const {  userDisplayName } = this.props;
+
+    return (
+      
+      <div className={`container ${styles.header}`}>
+        {localStorage.getItem("ID") ? (
+          <>
+            <h1>Update</h1>
+            <p>Hello, {escape(userDisplayName)}! You can add an item to the list</p>
+          </>
+        ) : (
+          <>
+            <h1>Hello</h1>
+            <p>Hello, {escape(userDisplayName)}! You can update the item to the list</p>
+          </>
+        )}
+      </div>
+    );
+  }
+
   public render(): React.ReactElement<ISol1Props> {
     const { hasTeamsContext, userDisplayName } = this.props;
     const { ageErrorMessage } = this.state;
 
     return (
       <section className={`${styles.sol1} ${hasTeamsContext ? styles.teams : ''}`}>
+        {this.renderHeader()} 
         <div className={`container ${styles.welcome}`}>
           <h2>Hello, {escape(userDisplayName)}! You can add an item to the list</h2>
         </div>
