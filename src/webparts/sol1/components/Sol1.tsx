@@ -156,6 +156,20 @@ export default class Sol1 extends React.Component<ISol1Props, ISol1State> {
   }
 }
 
+
+//cancel update
+private  cancelUpdate = (): void => {
+  // Reset the form fields or perform any other necessary actions
+
+  this.setState({
+    nom: '',
+    age: '',
+    ageErrorMessage: '',
+    Email: ''
+  });
+  localStorage.removeItem("ID");
+};
+
 //search data
 private async sendToSearch(): Promise<void> {
   const { nom, age } = this.state;
@@ -296,7 +310,9 @@ this.props.redirectTo();
               </tr>
           
           {localStorage.getItem("ID") ? (
-           <tr><td> <button className="btn btn-primary" onClick={() => this.updateData()}>Update</button></td></tr>
+           <tr><td> <button className="btn btn-primary" onClick={() => this.updateData()}>Update</button></td>
+           <td><button className="btn btn-primary" onClick={() => this.cancelUpdate()}>Cancel</button></td>
+           </tr>
           ) : (
             <tr><td><button className="btn btn-primary" onClick={() => this.sendData()}>Send</button></td>
             <td><button className="btn btn-primary" onClick={() => this.sendToSearch()}>Search</button></td></tr>
